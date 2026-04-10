@@ -1,0 +1,13 @@
+{
+  "name": "ai-management-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Backend + frontend para generar casos de uso QA con IA y sincronizarlos con Trello",
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "seed:sql": "node --env-file=.env database/generate-seed-values.mjs",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build"
+  }
+}

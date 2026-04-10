@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SettingsPage } from "../components/dashboard/settings-page";
+
+const apiBase = import.meta.env.PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+---
+
+<BaseLayout title="Settings | Niro">
+  <SettingsPage client:load apiBase={apiBase} />
+</BaseLayout>

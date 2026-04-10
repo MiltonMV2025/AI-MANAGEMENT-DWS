@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 220 26% 97%;
+  --foreground: 224 24% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 24% 12%;
+  --primary: 235 65% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 227 24% 91%;
+  --secondary-foreground: 224 24% 20%;
+  --muted: 226 24% 93%;
+  --muted-foreground: 222 17% 44%;
+  --accent: 235 71% 96%;
+  --accent-foreground: 235 65% 42%;
+  --border: 226 26% 88%;
+  --input: 226 26% 88%;
+  --ring: 235 65% 48%;
+  --radius: 0.9rem;
+}
+
+* {
+  @apply border-border;
+}
+
+html,
+body {
+  @apply h-full;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+main {
+  @apply min-h-screen;
+}

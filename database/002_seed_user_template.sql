@@ -1,0 +1,22 @@
+-- Generate deterministic encrypted email + SHA256 password hash using:
+-- node database/generate-seed-values.mjs
+--
+-- Then copy the printed SQL and run it in SQL Server.
+
+-- Example only:
+-- MERGE dbo.users AS target
+-- USING (SELECT
+--   'admin' AS username,
+--   '<EMAIL_ENCRYPTED>' AS email_encrypted,
+--   '<PASSWORD_SHA256>' AS password_sha256,
+--   'admin' AS role_key
+-- ) AS source
+-- ON target.username = source.username
+-- WHEN MATCHED THEN
+--   UPDATE SET
+--     email_encrypted = source.email_encrypted,
+--     password_sha256 = source.password_sha256,
+--     role_key = source.role_key
+-- WHEN NOT MATCHED THEN
+--   INSERT (username, email_encrypted, password_sha256, role_key)
+--   VALUES (source.username, source.email_encrypted, source.password_sha256, source.role_key);

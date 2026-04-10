@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const apiBase = import.meta.env.PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+---
+
+<BaseLayout title="Login | Niro">
+  <section class="mx-auto flex min-h-screen w-full max-w-md items-center px-4 py-8">
+    <div class="w-full rounded-2xl border bg-card p-6 shadow-soft">
+      <div class="mb-6">
+        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Niro</p>
+        <h1 class="mt-2 text-2xl font-bold">Sign in</h1>
+        <p class="mt-2 text-sm text-muted-foreground">Access your projects and generate QA sessions.</p>
+      </div>
+
+      <form id="login-form" class="space-y-4" data-api-base={apiBase}>
+        <div>
+          <label for="email" class="mb-2 block text-sm font-medium">Email</label>
+          <input id="email" name="email" type="email" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label for="password" class="mb-2 block text-sm font-medium">Password</label>
+          <input id="password" name="password" type="password" required class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+        </div>
+        <button type="submit" class="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground">
+          Login
+        </button>
+      </form>
+
+      <p id="message" class="mt-4 text-sm text-muted-foreground"></p>
+    </div>
+  </section>
+
+  <script is:inline>
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      window.location.href = "/projects";
+    }
+
+    const form = document.getElementById("login-form");
+    const message = document.getElementById("message");
+    const apiBase = form.dataset.apiBase;
+
+    function setMessage(text, mode = "muted") {
+      const classes = {
+        muted: "mt-4 text-sm text-muted-foreground",
+        error: "mt-4 text-sm text-red-600",
+      };
+      message.className = classes[mode] || classes.muted;
+      message.textContent = text;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setMessage("Signing in...");
+
+      const formData = new FormData(form);
+      const email = String(formData.get("email") || "").trim();
+      const password = String(formData.get("password") || "");
+
+      try {
+        const response = await fetch(`${apiBase}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data?.message || "Login failed.");
+        }
+
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("auth_username", data.user?.username || "");
+        localStorage.setItem("auth_role", data.user?.role || "user");
+        window.location.href = "/projects";
+      } catch (error) {
+        setMessage(error.message || "Unexpected error.", "error");
+      }
+    });
+  </script>
+</BaseLayout>

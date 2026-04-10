@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SessionDetailPage } from "../components/dashboard/session-detail-page";
+
+const apiBase = import.meta.env.PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+---
+
+<BaseLayout title="New Session | Niro">
+  <SessionDetailPage client:load apiBase={apiBase} />
+</BaseLayout>
